@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Nebula_Share.MainPage">
+    
+
+    <VerticalStackLayout Padding="20">
+        <!-- App Title -->
+        <Label Text="Nebula Share" 
+               FontSize="24" 
+               HorizontalOptions="Center" />
+
+        <!-- Input for File Name -->
+        <Entry x:Name="FileNameEntry" Placeholder="Enter file name" />
+
+        <!-- Button to Request File -->
+        <Button Text="Request File" 
+                Clicked="OnRequestFileClicked" />
+    </VerticalStackLayout>
+</ContentPage>
