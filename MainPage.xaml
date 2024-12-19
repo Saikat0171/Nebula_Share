@@ -1,7 +1,7 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Nebula_Share.MainPage"
-             BackgroundColor="#1E1E2F">
+             BackgroundColor="#010117">
 
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="20">
 
