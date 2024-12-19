@@ -1,20 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Nebula_Share.MainPage">
-    
+             x:Class="Nebula_Share.MainPage"
+             BackgroundColor="#1E1E2F">
 
-    <VerticalStackLayout Padding="20">
-        <!-- App Title -->
-        <Label Text="Nebula Share" 
-               FontSize="24" 
-               HorizontalOptions="Center" />
+    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="20">
 
-        <!-- Input for File Name -->
-        <Entry x:Name="FileNameEntry" Placeholder="Enter file name" />
+        <Label Text="Nebula Share"
+               FontSize="32"
+               TextColor="White"
+               HorizontalOptions="Center"
+               VerticalOptions="Start" />
 
-        <!-- Button to Request File -->
-        <Button Text="Request File" 
-                Clicked="OnRequestFileClicked" />
-    </VerticalStackLayout>
+        <Label Text="Share your files effortlessly"
+               FontSize="16"
+               TextColor="LightGray"
+               HorizontalOptions="Center"
+               VerticalOptions="Start" />
+
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20" Margin="0,40,0,0">
+
+            <Button Text="Send"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    FontSize="20"
+                    Padding="15"
+                    CornerRadius="10"
+                    WidthRequest="120"
+                    Clicked="OnSendButtonClicked" />
+
+            <Button Text="Receive"
+                    BackgroundColor="#2196F3"
+                    TextColor="White"
+                    FontSize="20"
+                    Padding="15"
+                    CornerRadius="10"
+                    WidthRequest="120"
+                    Clicked="OnReceiveButtonClicked" />
+
+        </StackLayout>
+
+    </StackLayout>
+
 </ContentPage>
