@@ -27,8 +27,29 @@ namespace Nebula_Share
             BindingContext = this;
 
             StartListeningForDevices();
+            StartBroadcasting(); // Start broadcasting the device info
         }
 
+        // Method to broadcast the device info
+        private void StartBroadcasting()
+        {
+            try
+            {
+                // Broadcast the device info to a specific broadcast address
+                var broadcastAddress = new IPEndPoint(IPAddress.Broadcast, BroadcastPort);
+                string deviceInfo = "MyDeviceName"; // Example device name
+                byte[] data = Encoding.UTF8.GetBytes(deviceInfo);
+
+                // Send the broadcast message
+                _udpClient.Send(data, data.Length, broadcastAddress);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error broadcasting device info: {ex.Message}");
+            }
+        }
+
+        // Method to listen for devices
         private void StartListeningForDevices()
         {
             Task.Run(async () =>
@@ -39,9 +60,10 @@ namespace Nebula_Share
                     {
                         var result = await _udpClient.ReceiveAsync();
                         var deviceInfo = Encoding.UTF8.GetString(result.Buffer);
+
+                        // Add unique devices to the list
                         if (!AvailableDevices.Contains(deviceInfo))
                         {
-                            // Update UI with Dispatcher.Dispatch
                             Dispatcher.Dispatch(() =>
                             {
                                 AvailableDevices.Add(deviceInfo);
@@ -73,6 +95,7 @@ namespace Nebula_Share
             // Clear the current list of devices and restart the discovery
             AvailableDevices.Clear();
             StartListeningForDevices();
+            StartBroadcasting(); // Re-broadcast the device info
         }
     }
 }
