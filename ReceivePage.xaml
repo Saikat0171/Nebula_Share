@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Nebula_Share.ReceivePage"
-             Title="Receiving Mode">
-
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Nebula_Share.ReceivePage">
     <StackLayout Padding="10">
-        <Label Text="Waiting for files..."
+        <Label Text="Waiting for file transfer..."
                FontSize="18"
-               HorizontalOptions="Center" />
-    </StackLayout>
+               HorizontalOptions="Center"
+               Margin="0,20,0,20" />
 
+        <!-- Floating bar for incoming file request -->
+        <Frame x:Name="RequestBar" IsVisible="False"
+               BackgroundColor="LightGray"
+               Padding="10"
+               CornerRadius="10">
+            <StackLayout>
+                <Label x:Name="SenderInfoLabel"
+                       Text="Sender: [Device Name]"
+                       FontSize="16" />
+                <Label x:Name="FileNameLabel"
+                       Text="File: [File Name]"
+                       FontSize="16"
+                       Margin="0,5,0,10" />
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Button Text="Accept"
+                            Clicked="OnAcceptClicked"
+                            BackgroundColor="Green"
+                            TextColor="White"
+                            WidthRequest="100"
+                            Margin="10,0" />
+                    <Button Text="Reject"
+                            Clicked="OnRejectClicked"
+                            BackgroundColor="Red"
+                            TextColor="White"
+                            WidthRequest="100"
+                            Margin="10,0" />
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+    </StackLayout>
 </ContentPage>

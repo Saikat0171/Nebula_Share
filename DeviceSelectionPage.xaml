@@ -11,6 +11,7 @@
                 HorizontalOptions="Center"
                 Clicked="OnScanButtonClicked" />
         <ListView x:Name="DeviceListView"
+                  ItemsSource="{Binding AvailableDevices}"
                   ItemTapped="OnDeviceSelected">
             <ListView.ItemTemplate>
                 <DataTemplate>

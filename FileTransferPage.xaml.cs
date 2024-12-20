@@ -9,6 +9,7 @@ namespace Nebula_Share
         private readonly List<string> _selectedFiles;
         private readonly string _deviceName;
 
+        // Constructor accepting selected files and device name
         public FileTransferPage(List<string> selectedFiles, string deviceName)
         {
             _selectedFiles = selectedFiles;

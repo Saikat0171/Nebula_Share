@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,35 +11,22 @@ namespace Nebula_Share
 {
     public partial class DeviceSelectionPage : ContentPage
     {
-        private readonly List<string> _selectedFiles; // Selected files to send
-        private readonly UdpClient _udpClient; // UDP client for device discovery
-        private readonly List<string> _availableDevices; // List of discovered devices
+        private readonly UdpClient _udpClient;
+        private const int BroadcastPort = 8888;
+        private readonly List<string> _selectedFiles;
 
+        public ObservableCollection<string> AvailableDevices { get; set; }
+
+        // Constructor accepting a list of selected files
         public DeviceSelectionPage(List<string> selectedFiles)
         {
             InitializeComponent();
-
-            // Initialize fields
             _selectedFiles = selectedFiles;
-            _udpClient = new UdpClient(8888); // Listening on port 8888
-            _availableDevices = new List<string>();
+            _udpClient = new UdpClient(BroadcastPort);
+            AvailableDevices = new ObservableCollection<string>();
+            BindingContext = this;
 
-            // Bind the ListView to the devices list
-            DeviceListView.ItemsSource = _availableDevices;
-
-            // Start listening for LAN devices
             StartListeningForDevices();
-        }
-
-        private async void OnScanButtonClicked(object sender, EventArgs e)
-        {
-            // Clear the device list and refresh
-            _availableDevices.Clear();
-            DeviceListView.ItemsSource = null;
-            DeviceListView.ItemsSource = _availableDevices;
-
-            // Notify user that scanning is in progress
-            await DisplayAlert("Scanning", "Scanning the LAN for devices...", "OK");
         }
 
         private void StartListeningForDevices()
@@ -48,26 +37,20 @@ namespace Nebula_Share
                 {
                     try
                     {
-                        // Wait for broadcasted messages
                         var result = await _udpClient.ReceiveAsync();
                         var deviceInfo = Encoding.UTF8.GetString(result.Buffer);
-
-                        // Add discovered device if not already in the list
-                        if (!_availableDevices.Contains(deviceInfo))
+                        if (!AvailableDevices.Contains(deviceInfo))
                         {
-                            _availableDevices.Add(deviceInfo);
-
-                            // Update the UI on the main thread using Dispatcher
-                            await Dispatcher.DispatchAsync(() =>
+                            // Update UI with Dispatcher.Dispatch
+                            Dispatcher.Dispatch(() =>
                             {
-                                DeviceListView.ItemsSource = null;
-                                DeviceListView.ItemsSource = _availableDevices;
+                                AvailableDevices.Add(deviceInfo);
                             });
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // Handle socket errors (e.g., socket closed)
+                        Console.WriteLine($"Error receiving device info: {ex.Message}");
                     }
                 }
             });
@@ -75,11 +58,21 @@ namespace Nebula_Share
 
         private async void OnDeviceSelected(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item is string deviceName)
+            if (e.Item is string selectedDevice)
             {
-                // Navigate to the File Transfer Page
-                await Navigation.PushAsync(new FileTransferPage(_selectedFiles, deviceName));
+                // Navigate to FileTransferPage with the selected device
+                await Navigation.PushAsync(new FileTransferPage(_selectedFiles, selectedDevice));
             }
+
+            // Deselect the item
+            ((ListView)sender).SelectedItem = null;
+        }
+
+        private void OnScanButtonClicked(object sender, EventArgs e)
+        {
+            // Clear the current list of devices and restart the discovery
+            AvailableDevices.Clear();
+            StartListeningForDevices();
         }
     }
 }
